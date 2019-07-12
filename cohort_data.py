@@ -1,5 +1,32 @@
 """Functions to parse a file containing student data."""
 
+cohort_data = open("cohort_data.txt")
+
+
+def get_cohort_data(filename):
+    whole_list = []
+
+    for line in filename:
+        line = line.rstrip()
+        strline = line.split("|")
+        # print(strline)
+        # print("strline before rstrip ^ --------------")
+        # print(strline)
+        # print("final strline ^ --------------")
+        # print(whole_list)
+        # print("Whole list before append ^ -----------------------")
+        whole_list.append(strline)
+        # print("whole_list after append strline")
+        # print(whole_list)
+        # f_name = strline[0]
+        # l_name = strline[1]
+        # house = strline[2]
+        # advisor = strline[3]
+        # cohort = strline[4]
+      
+    return whole_list
+        
+
 
 def unique_houses(filename):
     """TODO: Return a set of student houses.
@@ -13,12 +40,15 @@ def unique_houses(filename):
     ["Dumbledore's Army", 'Gryffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin']
 
     """
-
     houses = set()
+    data = get_cohort_data(filename)
 
-    # Code goes here
+    for list in data:
+        house = list[2]
+        houses.add(house)
 
-    return houses
+    houses.remove('')
+    print(houses)
 
 
 def sort_by_cohort(filename):
@@ -187,9 +217,9 @@ def find_house_members_by_student_name(student_list):
 
 
 
-if __name__ == "__main__":
-    import doctest
+# if __name__ == "__main__":
+#     import doctest
 
-    result = doctest.testmod()
-    if result.failed == 0:
-        print("ALL TESTS PASSED")
+#     result = doctest.testmod()
+#     if result.failed == 0:
+#         print("ALL TESTS PASSED")
