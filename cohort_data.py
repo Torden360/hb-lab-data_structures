@@ -1,30 +1,37 @@
 """Functions to parse a file containing student data."""
 
-cohort_data = open("cohort_data.txt")
+
 
 
 def get_cohort_data(filename):
-    whole_list = []
 
-    for line in filename:
-        line = line.rstrip()
-        strline = line.split("|")
-        # print(strline)
-        # print("strline before rstrip ^ --------------")
-        # print(strline)
-        # print("final strline ^ --------------")
-        # print(whole_list)
-        # print("Whole list before append ^ -----------------------")
-        whole_list.append(strline)
-        # print("whole_list after append strline")
-        # print(whole_list)
-        # f_name = strline[0]
-        # l_name = strline[1]
-        # house = strline[2]
-        # advisor = strline[3]
-        # cohort = strline[4]
-      
-    return whole_list
+    # print("------------------------ cohort data", cohort_data)
+
+    tokenized_lines = []
+    # changed to tokenized lines from whole list because not descriptive enough
+
+    with open(filename) as cohort_data:
+    # cool new thing: instead of open separately into a variable, use a with
+    # to close automatically at the end of operations
+        for line in cohort_data:
+            line = line.rstrip()
+            strline = line.split("|")
+            # print(strline)
+            # print("strline before rstrip ^ --------------")
+            # print(strline)
+            # print("final strline ^ --------------")
+            # print(whole_list)
+            # print("Whole list before append ^ -----------------------")
+            tokenized_lines.append(strline)
+            # print("whole_list after append strline")
+            # print(whole_list)
+            # f_name = strline[0]
+            # l_name = strline[1]
+            # house = strline[2]
+            # advisor = strline[3]
+            # cohort = strline[4]
+    
+    return tokenized_lines
         
 
 
@@ -40,15 +47,18 @@ def unique_houses(filename):
     ["Dumbledore's Army", 'Gryffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin']
 
     """
+
     houses = set()
     data = get_cohort_data(filename)
 
-    for list in data:
-        house = list[2]
+    for person in data:
+    # don't name things "list" because it can override and confusing
+        house = person[2]
         houses.add(house)
 
     houses.remove('')
-    print(houses)
+    
+    return houses
 
 
 def sort_by_cohort(filename):
@@ -65,14 +75,28 @@ def sort_by_cohort(filename):
     [['Harry Potter', 'Mandy Brocklehurst', 'Ron Weasley', 'Oliver Wood', 'Colin Creevey', 'Cho Chang', 'Michael Corner', 'Draco Malfoy', 'Seamus Finnigan', 'Eddie Carmichael', 'Theodore Nott', 'Terence Higgs', 'Hermione Granger', 'Penelope Clearwater', 'Angelina Johnson', 'Dennis Creevey'], ['Neville Longbottom', 'Cedric Diggory', 'Pansy Parkinson', 'Anthony Goldstein', 'Padma Patil', 'Luna Lovegood', 'Eleanor Branstone', 'Lee Jordan', 'Marietta Edgecombe', 'Andrew Kirke', 'Ginny Weasley', 'Mary Macdonald', 'Blaise Zabini', 'Natalie McDonald', 'Adrian Pucey', 'Hannah Abbott', 'Graham Pritchard', 'Susan Bones', 'Roger Davies', 'Owen Cauldwell'], ['Laura Madley', 'Orla Quirke', 'Parvati Patil', 'Eloise Midgeon', 'Zacharias Smith', 'Cormac McLaggen', 'Lisa Turpin', 'Demelza Robins', 'Ernie Macmillan', 'Millicent Bullstrode', 'Percy Weasley', 'Jimmy Peakes', 'Justin Finch-Fletchley', 'Miles Bletchley', 'Malcolm Baddock'], ['Marcus Belby', 'Euan Abercrombie', 'Vincent Crabbe', 'Ritchie Coote', 'Katie Bell', 'Terry Boot', 'Lavender Brown', 'Gregory Goyle', 'Marcus Flint', 'Dean Thomas', 'Jack Sloper', 'Rose Zeller', 'Stewart Ackerley', 'Fred Weasley', 'George Weasley', 'Romilda Vane', 'Alicia Spinnet', 'Kevin Whitby'], ['Friendly Friar', 'Grey Lady', 'Nearly Headless Nick', 'Bloody Baron']]
     """
 
-    all_students = []
     winter_16 = []
     spring_16 = []
     summer_16 = []
     fall_15 = []
     ghosts = []
 
-    # Code goes here
+    # dictionary was named cohort dictionary, wanted to note the relatinship between
+    # the two values because it was unclear what the dictionary was for 
+    cohort_to_list = {
+    'Summer 2016': summer_16, 'Winter 2016': winter_16, 'Spring 2016': spring_16,
+    "Fall 2015": fall_15, "G": ghosts
+    }
+
+    data = get_cohort_data(filename)
+
+    for person in data:
+        cohort = person[-1]
+        if cohort != "I":
+            cohort_to_list[cohort].append(f"{person[0]} {person[1]}")
+            # super cool thing: use an f string because can only append 1 item at a time!
+
+    all_students = [fall_15, winter_16, spring_16, summer_16, ghosts]
 
     return all_students
 
@@ -217,9 +241,9 @@ def find_house_members_by_student_name(student_list):
 
 
 
-# if __name__ == "__main__":
-#     import doctest
+if __name__ == "__main__":
+    import doctest
 
-#     result = doctest.testmod()
-#     if result.failed == 0:
-#         print("ALL TESTS PASSED")
+    result = doctest.testmod()
+    if result.failed == 0:
+        print("ALL TESTS PASSED")
